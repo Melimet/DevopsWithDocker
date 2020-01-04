@@ -1,0 +1,4 @@
+ docker exec -it looper bash
+root@0e49d8eb7c3f:/usr/app# tail -f ./logs.txt
+Secret message is:
+"Docker is easy"
