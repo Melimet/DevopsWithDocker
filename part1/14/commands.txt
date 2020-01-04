@@ -1,0 +1,4 @@
+docker build 14 -t ror
+
+docker run -it -p 3000:3000 ror
+
