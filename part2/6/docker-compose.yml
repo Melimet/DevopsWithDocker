@@ -1,0 +1,34 @@
+version: "3.6"
+
+services:
+  redis:
+    image: redis:latest
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USERNAME: possu
+      POSTGRES_PASSWORD: passu
+      POSTGRES_DB: kanta
+    volumes:
+      - database:/var/lib/postgresql/data
+
+  frontend:
+    build: ./front
+    ports:
+      - 5000:5000
+
+  backend:
+    build: ./back
+    ports:
+      - 8000:8000
+    environment:
+      - REDIS=redis
+      - DB_USERNAME=possu
+      - DB_PASSWORD=passu
+      - DB_NAME=kanta
+      - DB_HOST=db
+
+volumes:
+  database:
