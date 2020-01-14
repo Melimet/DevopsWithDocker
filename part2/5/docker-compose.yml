@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  redis:
+    image: redis:latest
+  frontend:
+    build: ./front/
+    ports:
+      - 5000:5000
+  
+  backend:
+    build: ./back/
+    ports:
+      - 8000:8000
+    environment:
+      - REDIS=redis
+        
