@@ -1,0 +1,45 @@
+version: "3.6"
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: exampledb
+    container_name: db_docker
+    volumes:
+      - database:/var/lib/postgresql/data
+
+  frontend:
+    build: ./front
+    ports:
+      - 5000:5000
+
+  redis:
+    image: redis:latest
+
+  backend:
+    build: ./back
+    ports:
+      - 8000:8000
+    environment:
+      - REDIS=redis
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=example
+      - DB_NAME=exampledb
+      - DB_HOST=db
+
+  proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  database:
